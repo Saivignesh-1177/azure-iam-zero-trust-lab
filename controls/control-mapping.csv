@@ -9,7 +9,7 @@ AC-7,Unsuccessful Logon Attempts,fail2ban on the on-prem server bans a source af
 AU-2,Event Logging,Key Vault AuditEvent category enabled,02-verify.sh C5; test_key_vault_audit_logs_go_to_log_analytics,EVD-006,T08,Implemented
 AU-6,Audit Record Review and Analysis,KQL hunts for secret reads denied calls unexpected networks RBAC and logging changes,04-evidence.sh runs queries/*.kql,EVD-009,T02;T08,Implemented
 AU-9,Protection of Audit Information,Logs stored in a separate workspace the workload has no rights to; alert on diagnostic-setting deletion,logging-and-vault-tampering.kql,EVD-006;EVD-009,T07,Implemented
-AU-12,Audit Record Generation,Diagnostic settings deployed by IaC for the vault and the subscription Activity Log; auditd on the on-prem server watches Arc token and sudoers access,02-verify.sh C5; attacks a07,EVD-006;EVD-013,T08;T16,Implemented
+AU-12,Audit Record Generation,Diagnostic settings deployed by IaC for the vault and the subscription Activity Log; auditd on the on-prem server records denied access to Arc key files and sudoers changes,02-verify.sh C5; attacks a07,EVD-006;EVD-013,T08;T16,Implemented
 CA-7,Continuous Monitoring,Azure Policy audit assignments and CI on every push,03-policy.sh report; GitHub Actions ci.yml,EVD-008;EVD-003,T14,Implemented
 CM-2,Baseline Configuration,infra/main.bicep is the single source of truth; what-if before every deploy,CI bicep build and lint; 01-deploy.sh what-if,EVD-001,T14,Implemented
 CM-6,Configuration Settings,Built-in Azure Policy audits for RBAC model purge protection expiry logging firewall,03-policy.sh,EVD-008,T13;T14,Implemented

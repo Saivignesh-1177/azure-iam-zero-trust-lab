@@ -66,7 +66,7 @@ jobs:
       - uses: github/codeql-action/upload-sarif@v3
         if: always()
         with:
-          sarif_file: results/results_sarif.sarif
+          sarif_file: results          # directory: works whatever checkov names the file
           category: checkov
 
   secrets:

@@ -1,0 +1,16 @@
+# Gitleaks: default rules + a narrow allow-list.
+# The values below are Azure BUILT-IN role definition IDs. They are public, documented by Microsoft
+# and identical in every tenant, so they are not secrets. The generic-api-key rule flags them only
+# because the variable names contain "Secrets". Nothing else is allow-listed.
+title = "azure-iam-zero-trust-lab"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Public Azure built-in role definition IDs"
+regexTarget = "match"
+regexes = [
+  '''4633458b-17de-408a-b874-0445c86b69e6''',  # Key Vault Secrets User
+  '''b86a8fe4-44ce-4948-aee5-eccb2c155cd7''',  # Key Vault Secrets Officer
+]
