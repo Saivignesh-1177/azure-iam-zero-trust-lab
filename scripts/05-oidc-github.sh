@@ -51,19 +51,25 @@ pass "RBAC Administrator @ $RG, constrained to Key Vault Secrets User"
 
 log "GitHub: protected environment + non-secret variables"
 if command -v gh >/dev/null && gh auth status >/dev/null 2>&1; then
-  gh api -X PUT "repos/$GITHUB_REPO/environments/lab" >/dev/null && pass "environment 'lab'"
-  echo "  -> Add yourself as a Required reviewer: Settings > Environments > lab"
-  gh variable set AZURE_CLIENT_ID       -R "$GITHUB_REPO" --body "$GH_APP_ID"
-  gh variable set AZURE_TENANT_ID       -R "$GITHUB_REPO" --body "$TENANT_ID"
-  gh variable set AZURE_SUBSCRIPTION_ID -R "$GITHUB_REPO" --body "$SUB_ID"
-  gh variable set AZURE_RG              -R "$GITHUB_REPO" --body "$RG"
-  gh variable set LAB_SUFFIX            -R "$GITHUB_REPO" --body "$(cat "$STATE/suffix")"
-  [[ -f "$STATE/env.sh" ]] && { load_outputs; gh variable set KV_ALLOWED_IPS -R "$GITHUB_REPO" --body "[\"$MY_IP\"]"; }
-  [[ -f "$STATE/vm_key.pub" ]] && gh variable set VM_SSH_PUBLIC_KEY -R "$GITHUB_REPO" --body "$(cat "$STATE/vm_key.pub")"
-  pass "repository variables set (identifiers, not secrets)"
+  # Protected environment: every deploy waits for YOUR approval (OWASP CICD-SEC-1)
+  me="$(gh api user --jq .id)"
+  gh api -X PUT "repos/$GITHUB_REPO/environments/lab" --input - >/dev/null <<JSON
+{ "reviewers": [ { "type": "User", "id": $me } ], "prevent_self_review": false,
+  "deployment_branch_policy": { "protected_branches": false, "custom_branch_policies": true } }
+JSON
+  gh api -X POST "repos/$GITHUB_REPO/environments/lab/deployment-branch-policies" -f name=main -f type=branch >/dev/null 2>&1 || true
+  pass "environment 'lab': required reviewer = you, deploys from main only"
+  # Identifiers go into SECRETS purely so GitHub masks them in public Actions logs. None is a credential.
+  gh secret set AZURE_CLIENT_ID       -R "$GITHUB_REPO" --body "$GH_APP_ID"
+  gh secret set AZURE_TENANT_ID       -R "$GITHUB_REPO" --body "$TENANT_ID"
+  gh secret set AZURE_SUBSCRIPTION_ID -R "$GITHUB_REPO" --body "$SUB_ID"
+  if [[ -f "$STATE/env.sh" ]]; then load_outputs; gh secret set KV_ALLOWED_IPS -R "$GITHUB_REPO" --body "[\"$MY_IP\"]"; fi
+  gh variable set AZURE_RG   -R "$GITHUB_REPO" --body "$RG"
+  gh variable set LAB_SUFFIX -R "$GITHUB_REPO" --body "$(cat "$STATE/suffix")"
+  pass "identifiers stored as masked secrets; non-sensitive names as variables"
 else
   warn "gh CLI not logged in. Set these as repository VARIABLES (not secrets) by hand:"
-  echo "  AZURE_CLIENT_ID=$GH_APP_ID  AZURE_TENANT_ID=<tenant>  AZURE_SUBSCRIPTION_ID=<sub>  AZURE_RG=$RG"
+  echo "  secrets: AZURE_CLIENT_ID AZURE_TENANT_ID AZURE_SUBSCRIPTION_ID KV_ALLOWED_IPS · variables: AZURE_RG LAB_SUFFIX"
 fi
 
 log "Prove there is no password on the app"
