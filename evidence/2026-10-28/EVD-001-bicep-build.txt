@@ -1,0 +1,5 @@
+main.bicep: build OK
+
+main.bicep: lint OK (0 errors)
+Bicep CLI version 0.48.1 (cec7951cf6)
+

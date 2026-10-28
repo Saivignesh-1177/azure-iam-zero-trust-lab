@@ -1,0 +1,17 @@
+# Checkov runs on the ARM JSON compiled from infra/main.bicep (CI: .github/workflows/ci.yml).
+# Every skip below is a documented, risk-accepted decision - see threat-model.md "Residual risk".
+framework:
+  - arm
+compact: true
+skip-check:
+  # Key Vault public network access stays "Enabled" so the IP allow-list and the VNet
+  # service-endpoint rule can work. A Private Endpoint (~$7/month) would be needed to disable it.
+  # Compensating control: networkAcls.defaultAction = Deny, bypass = None.  -> RISK-01
+  - CKV_AZURE_189
+  # The probe VM is administered ONLY through `az vm run-command`, which is a VM extension.
+  # That replaces SSH and any inbound port, and is gated by Azure RBAC + Activity Log.  -> RISK-03
+  - CKV_AZURE_50
+  # Encryption at host needs a subscription feature flag and is not on every free-tier SKU.
+  # Managed disks are already encrypted at rest with platform-managed keys (SC-28).  -> RISK-04
+  - CKV_AZURE_97
+  - CKV_AZURE_151

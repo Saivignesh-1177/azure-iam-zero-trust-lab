@@ -1,10 +1,25 @@
+# Python
 __pycache__/
 *.pyc
+.pytest_cache/
+.venv/
+
+# Local lab state: deployment outputs, generated SSH key, UNREDACTED exports. Never commit.
+.state/
+params.json
+compiled/
+results/
+
+# Secrets / credentials
 .env
 *.pem
 *.key
 *.pfx
 *.secret
+*.publishsettings
 terraform.tfstate*
 .azure/
+
+# OS
 .DS_Store
+Thumbs.db

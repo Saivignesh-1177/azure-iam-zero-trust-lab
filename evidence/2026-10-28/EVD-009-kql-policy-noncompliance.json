@@ -1,0 +1,50 @@
+[
+  {
+    "ActivityStatusValue": "Failure",
+    "OperationNameValue": "MICROSOFT.AUTHORIZATION/POLICIES/AUDITIFNOTEXISTS/ACTION",
+    "Policies": "[{\"policyDefinitionId\":\"/providers/Microsoft.Authorization/policyDefinitions/<GUID>\",\"policySetDefinitionId\":\"/providers/Microsoft.Authorization/policySetDefinitions/<GUID>\",\"policyDefinitionReferenceId\":\"linuxGuestConfigBaselinesMonitoring\",\"policySetDefinitionVersion\":\"57.60.0\",\"policyDefinitionVersion\":\"2.3.1\",\"policyAssignmentId\":\"/subscriptions/<SUBSCRIPTION_ID>/providers/Microsoft.Authorization/policyAssignments/SecurityCenterBuiltIn\",\"policyEnrollmentIds\":[]}]",
+    "TableName": "PrimaryResult",
+    "TimeGenerated": "2026-10-28T19:34:30.8570316Z",
+    "_ResourceId": "/subscriptions/<SUBSCRIPTION_ID>/resourcegroups/rg-sc500-iam-zt-lab/providers/microsoft.hybridcompute/machines/zt-app-01"
+  },
+  {
+    "ActivityStatusValue": "Failure",
+    "OperationNameValue": "MICROSOFT.AUTHORIZATION/POLICIES/AUDITIFNOTEXISTS/ACTION",
+    "Policies": "[{\"policyDefinitionId\":\"/providers/Microsoft.Authorization/policyDefinitions/<GUID>\",\"policySetDefinitionId\":\"/providers/Microsoft.Authorization/policySetDefinitions/<GUID>\",\"policyDefinitionReferenceId\":\"authenticationToLinuxMachinesShouldRequireSSHKeysMonitoringEffect\",\"policySetDefinitionVersion\":\"57.60.0\",\"policyDefinitionVersion\":\"3.2.0\",\"policyAssignmentId\":\"/subscriptions/<SUBSCRIPTION_ID>/providers/Microsoft.Authorization/policyAssignments/SecurityCenterBuiltIn\",\"policyEnrollmentIds\":[]}]",
+    "TableName": "PrimaryResult",
+    "TimeGenerated": "2026-10-28T19:34:09.7241826Z",
+    "_ResourceId": "/subscriptions/<SUBSCRIPTION_ID>/resourcegroups/rg-sc500-iam-zt-lab/providers/microsoft.hybridcompute/machines/zt-app-01"
+  },
+  {
+    "ActivityStatusValue": "Failure",
+    "OperationNameValue": "MICROSOFT.AUTHORIZATION/POLICIES/AUDITIFNOTEXISTS/ACTION",
+    "Policies": "[{\"policyDefinitionId\":\"/providers/Microsoft.Authorization/policyDefinitions/<GUID>\",\"policySetDefinitionId\":\"/providers/Microsoft.Authorization/policySetDefinitions/<GUID>\",\"policyDefinitionReferenceId\":\"serverSqlDbVulnerabilityAssesmentMonitoring\",\"policySetDefinitionVersion\":\"57.60.0\",\"policyDefinitionVersion\":\"1.0.0\",\"policyAssignmentId\":\"/subscriptions/<SUBSCRIPTION_ID>/providers/Microsoft.Authorization/policyAssignments/SecurityCenterBuiltIn\",\"policyEnrollmentIds\":[]}]",
+    "TableName": "PrimaryResult",
+    "TimeGenerated": "2026-10-28T19:34:05.2126855Z",
+    "_ResourceId": "/subscriptions/<SUBSCRIPTION_ID>/resourcegroups/rg-sc500-iam-zt-lab/providers/microsoft.hybridcompute/machines/zt-app-01"
+  },
+  {
+    "ActivityStatusValue": "Failure",
+    "OperationNameValue": "MICROSOFT.AUTHORIZATION/POLICIES/AUDITIFNOTEXISTS/ACTION",
+    "Policies": "[{\"policyDefinitionId\":\"/providers/Microsoft.Authorization/policyDefinitions/<GUID>\",\"policySetDefinitionId\":\"/providers/Microsoft.Authorization/policySetDefinitions/<GUID>\",\"policyDefinitionReferenceId\":\"systemUpdatesV2Monitoring\",\"policySetDefinitionVersion\":\"57.60.0\",\"policyDefinitionVersion\":\"1.0.1\",\"policyAssignmentId\":\"/subscriptions/<SUBSCRIPTION_ID>/providers/Microsoft.Authorization/policyAssignments/SecurityCenterBuiltIn\",\"policyEnrollmentIds\":[]}]",
+    "TableName": "PrimaryResult",
+    "TimeGenerated": "2026-10-28T19:34:00.1319993Z",
+    "_ResourceId": "/subscriptions/<SUBSCRIPTION_ID>/resourcegroups/rg-sc500-iam-zt-lab/providers/microsoft.hybridcompute/machines/zt-app-01"
+  },
+  {
+    "ActivityStatusValue": "Start",
+    "OperationNameValue": "MICROSOFT.AUTHORIZATION/POLICIES/AUDITIFNOTEXISTS/ACTION",
+    "Policies": "",
+    "TableName": "PrimaryResult",
+    "TimeGenerated": "2026-10-28T19:23:37.1379434Z",
+    "_ResourceId": "/subscriptions/<SUBSCRIPTION_ID>/resourcegroups/rg-sc500-iam-zt-lab/providers/microsoft.hybridcompute/machines/zt-app-01"
+  },
+  {
+    "ActivityStatusValue": "Success",
+    "OperationNameValue": "MICROSOFT.AUTHORIZATION/POLICIES/AUDIT/ACTION",
+    "Policies": "[{\"policyDefinitionId\":\"/providers/Microsoft.Authorization/policyDefinitions/<GUID>\",\"policySetDefinitionId\":\"/providers/Microsoft.Authorization/policySetDefinitions/<GUID>\",\"policyDefinitionReferenceId\":\"systemUpdatesAutoAssessmentMode\",\"policySetDefinitionName\":\"<GUID>\",\"policySetDefinitionDisplayName\":\"Microsoft cloud security benchmark\",\"policySetDefinitionVersion\":\"57.60.0\",\"policyDefinitionName\":\"<GUID>\",\"policyDefinitionDisplayName\":\"Machines should be configured to periodically check for missing system updates\",\"policyDefinitionVersion\":\"3.10.0\",\"policyDefinitionEffect\":\"Audit\",\"policyAssignmentId\":\"/subscriptions/<SUBSCRIPTION_ID>/providers/Microsoft.Authorization/policyAssignments/SecurityCenterBuiltIn\",\"policyAssignmentName\":\"SecurityCenterBuiltIn\",\"policyAssignmentDisplayName\":\"ASC Default (subscription: <SUBSCRIPTION_ID>)\",\"policyAssignmentScope\":\"/subscriptions/<SUBSCRIPTION_ID>\",\"policyAssignmentEnforcementMode\":\"Default\",\"policyExemptionIds\":[],\"policyEnrollmentIds\":[]}]",
+    "TableName": "PrimaryResult",
+    "TimeGenerated": "2026-10-28T19:23:36.7004619Z",
+    "_ResourceId": "/subscriptions/<SUBSCRIPTION_ID>/resourcegroups/rg-sc500-iam-zt-lab/providers/microsoft.hybridcompute/machines/zt-app-01"
+  }
+]

@@ -1,5 +1,32 @@
-Control ID,Requirement,Implementation,Evidence
-AC-3,Access Enforcement,Resource-scoped Azure RBAC,Role assignment export
-AC-6,Least Privilege,Secrets User rather than Owner or Contributor,RBAC test output
-IA-5,Authenticator Management,No static cloud credential stored in application,Repository/config review
-SC-28,Protection of Information at Rest,Secret stored in Key Vault,Key Vault configuration
+Control ID,Control Name,Implementation,Validation,Evidence ID,Threat IDs,Status
+AC-2,Account Management,One dedicated user-assigned managed identity per workload; lifecycle owned by Bicep and removed by teardown,02-verify.sh C1; test_workload_uses_user_assigned_managed_identity,EVD-004,T03,Implemented
+AC-3,Access Enforcement,Key Vault uses the Azure RBAC permission model only (no access policies),02-verify.sh C3; probes read_app_secret=200 read_decoy_secret=403,EVD-005;EVD-007,T03;T05,Implemented
+AC-6,Least Privilege,Key Vault Secrets User scoped to a single secret (app-db-password),02-verify.sh C1-C2; test_workload_role_is_scoped_to_a_single_secret,EVD-004;EVD-007,T03;T04;T16,Implemented
+AC-6(1),Authorize Access to Security Functions,Admin gets Key Vault Secrets Officer on one vault; pipeline RBAC Administrator constrained by ABAC condition to Secrets User,test_admin_role_is_vault_scoped_and_optional; 05-oidc-github.sh,EVD-004;EVD-010,T04;T15,Implemented
+AC-6(9),Log Use of Privileged Functions,Subscription Activity Log to Log Analytics plus activity-log alerts on role assignment write/delete,rbac-changes.kql; test_tamper_alerts_cover_escalation_destruction_and_blinding,EVD-006;EVD-009,T04;T07,Implemented
+AC-6(10),Prohibit Non-privileged Users from Executing Privileged Functions,Workload cannot list/write/delete secrets or call ARM/Graph,probes list_secrets write_secret delete_secret arm_list_rgs graph_list_users all denied,EVD-007,T03;T06,Implemented
+AC-7,Unsuccessful Logon Attempts,fail2ban on the on-prem server bans a source after 3 failed SSH attempts; password auth disabled,attacks/run-attacks.sh a06,EVD-013,T11,Implemented
+AU-2,Event Logging,Key Vault AuditEvent category enabled,02-verify.sh C5; test_key_vault_audit_logs_go_to_log_analytics,EVD-006,T08,Implemented
+AU-6,Audit Record Review and Analysis,KQL hunts for secret reads denied calls unexpected networks RBAC and logging changes,04-evidence.sh runs queries/*.kql,EVD-009,T02;T08,Implemented
+AU-9,Protection of Audit Information,Logs stored in a separate workspace the workload has no rights to; alert on diagnostic-setting deletion,logging-and-vault-tampering.kql,EVD-006;EVD-009,T07,Implemented
+AU-12,Audit Record Generation,Diagnostic settings deployed by IaC for the vault and the subscription Activity Log; auditd on the on-prem server records denied access to Arc key files and sudoers changes,02-verify.sh C5; attacks a07,EVD-006;EVD-013,T08;T16,Implemented
+CA-7,Continuous Monitoring,Azure Policy audit assignments and CI on every push,03-policy.sh report; GitHub Actions ci.yml,EVD-008;EVD-003,T14,Implemented
+CM-2,Baseline Configuration,infra/main.bicep is the single source of truth; what-if before every deploy,CI bicep build and lint; 01-deploy.sh what-if,EVD-001,T14,Implemented
+CM-6,Configuration Settings,Built-in Azure Policy audits for RBAC model purge protection expiry logging firewall,03-policy.sh,EVD-008,T13;T14,Implemented
+CM-7,Least Functionality,Vault deployment/template/disk-encryption integrations disabled; no public IP; deny-all inbound; Arc agent in monitor mode; app sandboxed by systemd,test_key_vault_least_functionality; test_no_public_ip_anywhere; azcmagent config list,EVD-005;EVD-013,T11;T18,Implemented
+CP-10,System Recovery and Reconstitution,Soft delete (7 days) and purge protection on the vault,test_key_vault_is_recoverable; 02-verify.sh C3,EVD-005,T06,Implemented
+IA-2,Identification and Authentication (Organizational Users),Admin signs in with Entra ID with MFA enforced by security defaults,Manual: Entra admin center screenshot,EVD-011,T15,Partially implemented (no Conditional Access/PIM on free tier)
+IA-4,Identifier Management,Unique per-lab names from a suffix; workload identified by its own principal ID,02-verify.sh C1,EVD-004,T03,Implemented
+IA-5,Authenticator Management,No static credentials: MI tokens are platform-rotated; CI uses OIDC; secrets expire in 90 days,test_secrets_expire_and_have_content_type; 05-oidc-github.sh credential check,EVD-002;EVD-010,T01;T09;T13,Implemented
+IA-5(7),No Embedded Unencrypted Static Authenticators,Secret values are generated secure parameters; Gitleaks and hygiene tests on every push,test_no_credentials_in_repository; CI Gitleaks,EVD-003,T01,Implemented
+IA-9,Service Identification and Authentication,Cloud workload uses its managed identity via IMDS; on-prem server uses its Azure Arc identity via HIMDS challenge-response,probe imds_token=200 read_app_secret=200; attacks a04,EVD-007;EVD-013,T01;T02;T16,Implemented
+IR-4,Incident Handling,Runbook for suspected token theft unexpected secret access and RBAC tampering,docs/incident-runbook.md tabletop,EVD-009,T02;T04;T07,Documented
+RA-3,Risk Assessment,STRIDE threat model with risk scoring and residual risk register,threat-model.md; test_traceability.py,EVD-002,T01;T15,Implemented
+RA-5,Vulnerability Monitoring and Scanning,Checkov IaC scan in CI; Defender for Cloud foundational CSPM,CI checkov job; 03-policy.sh report,EVD-003;EVD-012,T14,Implemented
+SA-11,Developer Testing and Evaluation,Automated design tests on the compiled ARM template plus mutation check,pytest in CI,EVD-002,T14,Implemented
+SC-7,Boundary Protection,Vault firewall default Deny with IP and VNet rules; NSG deny inbound and Internet egress,test_key_vault_firewall_default_deny; probe internet_egress=000,EVD-005;EVD-007,T05;T11;T12,Implemented (RISK-01 RISK-02 accepted)
+SC-8,Transmission Confidentiality and Integrity,Key Vault and IMDS-token flows use TLS 1.2+ (platform enforced),Inherited from Azure,EVD-007,T05,Inherited
+SC-28,Protection of Information at Rest,Secrets stored encrypted in Key Vault; VM disks platform-encrypted,02-verify.sh C3,EVD-005,T05,Implemented (RISK-04 accepted)
+SI-10,Information Input Validation,SSRF-prone fetch endpoint disabled by default; Arc identity endpoint requires a header an SSRF cannot set,attacks/run-attacks.sh a03,EVD-013,T17,Implemented (finding tracked in lab journal)
+SI-4,System Monitoring,Activity-log alerts for RBAC vault and diagnostic-setting changes; KQL hunts,Alert rules in main.bicep; queries/*.kql,EVD-009,T02;T04;T06;T07,Implemented
+SR-3,Supply Chain Controls and Processes,Dependabot for GitHub Actions and pip; deploy restricted to protected environment,.github/dependabot.yml; test_deploy_uses_oidc_manual_trigger_and_environment,EVD-002,T10,Implemented

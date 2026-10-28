@@ -1,0 +1,80 @@
+#cloud-config
+# zt-app-01 — the on-prem workload server (VirtualBox), hardened at first boot.
+# __SSH_PUBKEY__ is replaced by make-seed.py. Nothing secret lives in this file.
+
+hostname: zt-app-01
+timezone: UTC
+
+users:
+  # Admin: key-only SSH. Passwordless sudo is a lab convenience so scripts can automate -> noted as RISK-07.
+  - name: ztadmin
+    groups: [sudo, adm]
+    shell: /bin/bash
+    sudo: "ALL=(ALL) NOPASSWD:ALL"
+    lock_passwd: true
+    ssh_authorized_keys: [__SSH_PUBKEY__]
+  # Low-privilege interactive user: the "malicious insider / compromised account" in the attack scenarios.
+  - name: intern
+    shell: /bin/bash
+    lock_passwd: true
+    ssh_authorized_keys: [__SSH_PUBKEY__]
+
+ssh_pwauth: false
+disable_root: true
+
+package_update: true
+package_upgrade: true
+packages: [python3, curl, jq, ufw, fail2ban, auditd, unattended-upgrades]
+
+write_files:
+  - path: /etc/ssh/sshd_config.d/10-zt-hardening.conf
+    content: |
+      PasswordAuthentication no
+      KbdInteractiveAuthentication no
+      PermitRootLogin no
+      MaxAuthTries 3
+      LoginGraceTime 30
+      X11Forwarding no
+      AllowTcpForwarding no
+      AllowUsers ztadmin intern
+  - path: /etc/fail2ban/jail.d/sshd.local
+    content: |
+      # Lab values so the A06 drill doesn't lock you out for long. Production: bantime >= 1h.
+      [sshd]
+      enabled = true
+      mode = aggressive
+      maxretry = 3
+      findtime = 10m
+      bantime = 2m
+  # Audit changes to identity/sudo config. (The Arc token-dir watch is added by arc-onboard.sh,
+  # because that directory only exists after the agent is installed.)
+  - path: /etc/audit/rules.d/zt.rules
+    content: |
+      -w /etc/sudoers -p wa -k priv_change
+      -w /etc/sudoers.d -p wa -k priv_change
+      -w /etc/group -p wa -k identity_change
+      -w /etc/passwd -p wa -k identity_change
+      # CIS: unsuccessful file access by human users (catches denied traversal into Arc's token dir)
+      -a always,exit -F arch=b64 -S open,openat,openat2 -F exit=-EACCES -F auid>=1000 -F auid!=unset -k access_denied
+      -a always,exit -F arch=b64 -S open,openat,openat2 -F exit=-EPERM -F auid>=1000 -F auid!=unset -k access_denied
+  - path: /etc/sysctl.d/90-zt.conf
+    content: |
+      net.ipv4.conf.all.accept_redirects = 0
+      net.ipv4.conf.all.send_redirects = 0
+      net.ipv4.conf.all.log_martians = 1
+      kernel.kptr_restrict = 2
+      kernel.dmesg_restrict = 1
+
+runcmd:
+  # Host firewall: inbound only from the host-only lab network (enp0s8), nothing from NAT/internet.
+  - ufw default deny incoming
+  - ufw default allow outgoing
+  - ufw allow in on enp0s8 to any port 22 proto tcp
+  - ufw allow in on enp0s8 to any port 8080 proto tcp
+  - ufw logging on
+  - ufw --force enable
+  - sysctl --system
+  - systemctl restart ssh
+  - systemctl enable --now fail2ban auditd
+  - augenrules --load
+  - touch /var/lib/cloud/instance/zt-ready

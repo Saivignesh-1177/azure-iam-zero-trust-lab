@@ -1,0 +1,52 @@
+{
+  "id": "/subscriptions/<SUBSCRIPTION_ID>/resourceGroups/rg-sc500-iam-zt-lab/providers/Microsoft.KeyVault/vaults/sc500kvzt1028182",
+  "location": "eastus",
+  "name": "sc500kvzt1028182",
+  "properties": {
+    "accessPolicies": [],
+    "createMode": null,
+    "enablePurgeProtection": true,
+    "enableRbacAuthorization": true,
+    "enableSoftDelete": true,
+    "enabledForDeployment": false,
+    "enabledForDiskEncryption": false,
+    "enabledForTemplateDeployment": false,
+    "hsmPoolResourceId": null,
+    "networkAcls": {
+      "bypass": "None",
+      "defaultAction": "Deny",
+      "ipRules": [
+        {
+          "value": "<ADMIN_PUBLIC_IP>/32"
+        }
+      ],
+      "virtualNetworkRules": []
+    },
+    "privateEndpointConnections": null,
+    "provisioningState": "Succeeded",
+    "publicNetworkAccess": "Enabled",
+    "sku": {
+      "family": "A",
+      "name": "standard"
+    },
+    "softDeleteRetentionInDays": 7,
+    "tenantId": "<TENANT_ID>",
+    "vaultUri": "https://sc500kvzt1028182.vault.azure.net/"
+  },
+  "resourceGroup": "rg-sc500-iam-zt-lab",
+  "systemData": {
+    "createdAt": "2026-10-28T19:01:48.997000+00:00",
+    "createdBy": "<EMAIL>",
+    "createdByType": "User",
+    "lastModifiedAt": "2026-10-28T19:01:48.997000+00:00",
+    "lastModifiedBy": "<EMAIL>",
+    "lastModifiedByType": "User"
+  },
+  "tags": {
+    "dataClassification": "synthetic",
+    "environment": "lab",
+    "owner": "security-engineering",
+    "project": "azure-iam-zero-trust-lab"
+  },
+  "type": "Microsoft.KeyVault/vaults"
+}

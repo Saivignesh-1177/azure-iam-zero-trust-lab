@@ -1,0 +1,38 @@
+[
+  {
+    "id": "/subscriptions/<SUBSCRIPTION_ID>/resourcegroups/rg-sc500-iam-zt-lab/providers/microsoft.keyvault/vaults/sc500kvzt1028182/providers/microsoft.insights/diagnosticSettings/kv-audit-to-law",
+    "logAnalyticsDestinationType": "AzureDiagnostics",
+    "logs": [
+      {
+        "category": "AuditEvent",
+        "enabled": true,
+        "retentionPolicy": {
+          "days": 0,
+          "enabled": false
+        }
+      },
+      {
+        "category": "AzurePolicyEvaluationDetails",
+        "enabled": false,
+        "retentionPolicy": {
+          "days": 0,
+          "enabled": false
+        }
+      }
+    ],
+    "metrics": [
+      {
+        "category": "AllMetrics",
+        "enabled": false,
+        "retentionPolicy": {
+          "days": 0,
+          "enabled": false
+        }
+      }
+    ],
+    "name": "kv-audit-to-law",
+    "resourceGroup": "rg-sc500-iam-zt-lab",
+    "type": "Microsoft.Insights/diagnosticSettings",
+    "workspaceId": "/subscriptions/<SUBSCRIPTION_ID>/resourceGroups/rg-sc500-iam-zt-lab/providers/Microsoft.OperationalInsights/workspaces/sc500-law-zt1028182"
+  }
+]

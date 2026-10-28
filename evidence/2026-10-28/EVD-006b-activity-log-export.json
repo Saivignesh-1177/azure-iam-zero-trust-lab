@@ -1,0 +1,45 @@
+{
+  "value": [
+    {
+      "id": "/subscriptions/<SUBSCRIPTION_ID>/providers/microsoft.insights/diagnosticSettings/sc500-activity-to-law",
+      "location": "global",
+      "logs": [
+        {
+          "category": "Administrative",
+          "enabled": true
+        },
+        {
+          "category": "Security",
+          "enabled": true
+        },
+        {
+          "category": "Policy",
+          "enabled": true
+        },
+        {
+          "category": "Alert",
+          "enabled": true
+        },
+        {
+          "category": "ServiceHealth",
+          "enabled": false
+        },
+        {
+          "category": "Recommendation",
+          "enabled": false
+        },
+        {
+          "category": "Autoscale",
+          "enabled": false
+        },
+        {
+          "category": "ResourceHealth",
+          "enabled": false
+        }
+      ],
+      "name": "sc500-activity-to-law",
+      "type": "Microsoft.Insights/diagnosticSettings",
+      "workspaceId": "/subscriptions/<SUBSCRIPTION_ID>/resourceGroups/rg-sc500-iam-zt-lab/providers/Microsoft.OperationalInsights/workspaces/sc500-law-zt1028182"
+    }
+  ]
+}
