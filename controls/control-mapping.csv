@@ -1,0 +1,5 @@
+Control ID,Requirement,Implementation,Evidence
+AC-3,Access Enforcement,Resource-scoped Azure RBAC,Role assignment export
+AC-6,Least Privilege,Secrets User rather than Owner or Contributor,RBAC test output
+IA-5,Authenticator Management,No static cloud credential stored in application,Repository/config review
+SC-28,Protection of Information at Rest,Secret stored in Key Vault,Key Vault configuration

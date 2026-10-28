@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+.env
+*.pem
+*.key
+*.pfx
+*.secret
+terraform.tfstate*
+.azure/
+.DS_Store
