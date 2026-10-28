@@ -31,7 +31,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Azure login (OIDC, no secret)
-        uses: azure/login@v2
+        uses: azure/login@v3
         with:
           # Identifiers, not credentials - stored as secrets ONLY so GitHub masks them in public logs.
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
