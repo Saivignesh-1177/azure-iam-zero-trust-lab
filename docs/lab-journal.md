@@ -246,4 +246,5 @@ Private Link / VPN / dedicated egress IPs.
 | F-008 | 2026-10-28 | Debug trace printed a bearer token | Medium (process) | `bash -x` | ERR trap prints line only; JWT redaction | ✅ |
 | F-009 | 2026-10-28 | First GitHub CI run: Checkov + Gitleaks red | Low (no real leak) | SARIF file renamed by newer Checkov; Gitleaks flagged public role GUIDs + one CSV phrase | Upload `results/` dir; narrow `.gitleaks.toml` allow-list (2 public GUIDs); `.gitleaksignore` for 1 reviewed fingerprint; local leak drill still caught | ✅ CI 5/5 green |
 | F-010 | 2026-10-28 | MCSB says Arc server lacks SSH-key auth & baseline | Low (visibility, not exposure) | Guest Configuration disabled by monitor mode → 0 reports → AuditIfNotExists = NonCompliant | Accepted as RISK-09; on-box evidence compensates | ✅ verified 0 GC assignments + `passwordauthentication no` |
-| F-011 | | | | | | |
+| F-011 | 2026-10-28 | First OIDC deploy refused: `AADSTS700213` | Low (fail-closed) | GitHub now sends an **immutable-ID subject** (`repo:owner@<id>/repo@<id>:environment:lab`); credential trusted the legacy name-only form | Script reads `sub_claim_prefix` from GitHub's API; credential updated (stricter: survives renames, blocks re-created-repo takeover) | ✅ see deploy re-run |
+| F-012 | | | | | | |
