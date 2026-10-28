@@ -1,0 +1,8 @@
+// Attempts to blind the defenders or destroy the vault. (AU-9, CP-10)  ATT&CK T1562.008, T1485
+AzureActivity
+| where OperationNameValue in~ ("MICROSOFT.INSIGHTS/DIAGNOSTICSETTINGS/DELETE",
+                                "MICROSOFT.INSIGHTS/DIAGNOSTICSETTINGS/WRITE",
+                                "MICROSOFT.KEYVAULT/VAULTS/DELETE",
+                                "MICROSOFT.KEYVAULT/VAULTS/WRITE")
+| project TimeGenerated, Caller, CallerIpAddress, OperationNameValue, ActivityStatusValue, _ResourceId
+| order by TimeGenerated desc

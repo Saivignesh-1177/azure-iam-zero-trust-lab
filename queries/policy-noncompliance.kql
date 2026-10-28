@@ -1,0 +1,7 @@
+// Policy evaluation events recorded in the Activity Log. (CM-6, CA-7)
+AzureActivity
+| where CategoryValue == "Policy"
+| extend Props = parse_json(Properties)
+| project TimeGenerated, OperationNameValue, ActivityStatusValue, _ResourceId,
+          Policies = tostring(Props.policies)
+| order by TimeGenerated desc

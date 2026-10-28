@@ -1,0 +1,17 @@
+// Secret read by an identity from an IP it has never used before (token replay?). (SC-7, SI-4)
+// ATT&CK T1528 / T1550.001. Works for cloud VMs, Arc servers and humans alike - no hard-coded IPs.
+// On a brand-new lab every pair is "new"; after a day the baseline makes this quiet and meaningful.
+let baselineStart = ago(7d);
+let recent = ago(1d);
+let reads = AzureDiagnostics
+    | where ResourceProvider == "MICROSOFT.KEYVAULT" and Category == "AuditEvent"
+    | where OperationName == "SecretGet" and httpStatusCode_d == 200
+    | project TimeGenerated, CallerObjectId = identity_claim_oid_g, CallerIPAddress, Secret = tostring(split(id_s, "/")[4]);
+let known = reads
+    | where TimeGenerated between (baselineStart .. recent)
+    | distinct CallerObjectId, CallerIPAddress;
+reads
+| where TimeGenerated > recent
+| join kind=leftanti known on CallerObjectId, CallerIPAddress
+| summarize FirstSeen = min(TimeGenerated), Reads = count(), Secrets = make_set(Secret) by CallerObjectId, CallerIPAddress
+| order by FirstSeen desc

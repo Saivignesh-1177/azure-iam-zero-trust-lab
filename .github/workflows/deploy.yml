@@ -1,0 +1,58 @@
+name: deploy-lab
+
+# Manual only. A pull request can never trigger a deployment (OWASP CICD-SEC-4, poisoned pipeline).
+on:
+  workflow_dispatch:
+    inputs:
+      deploy_workload:
+        description: "Also deploy the B1s probe VM"
+        type: boolean
+        default: false
+
+permissions:
+  id-token: write    # lets the job request a GitHub OIDC token - this replaces any client secret
+  contents: read
+
+concurrency: deploy-lab
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    # The Entra federated credential trusts ONLY "repo:<owner>/<repo>:environment:lab".
+    # Add a Required reviewer on this environment so every deploy needs a human approval.
+    environment: lab
+    env:
+      RG: ${{ vars.AZURE_RG }}
+      SUFFIX: ${{ vars.LAB_SUFFIX }}
+      ALLOWED_IPS: ${{ vars.KV_ALLOWED_IPS || '[]' }}
+      SSH_KEY: ${{ vars.VM_SSH_PUBLIC_KEY }}
+      DEPLOY_WORKLOAD: ${{ inputs.deploy_workload }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Azure login (OIDC, no secret)
+        uses: azure/login@v2
+        with:
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+
+      # Values travel through env vars, never inline ${{ }} in shell (script-injection hardening).
+      # adminPrincipalId is left empty: the pipeline is only allowed to grant Key Vault Secrets User.
+      - name: Build parameters
+        run: |
+          cat > params.json <<EOF
+          { "\$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+            "contentVersion": "1.0.0.0",
+            "parameters": {
+              "suffix":          { "value": "$SUFFIX" },
+              "allowedIpRanges": { "value": $ALLOWED_IPS },
+              "deployWorkload":  { "value": $DEPLOY_WORKLOAD },
+              "vmSshPublicKey":  { "value": "$SSH_KEY" } } }
+          EOF
+
+      - name: What-if (change preview, kept in the run log)
+        run: az deployment group what-if -g "$RG" -n zt-main -f infra/main.bicep -p @params.json
+
+      - name: Deploy
+        run: az deployment group create -g "$RG" -n zt-main -f infra/main.bicep -p @params.json -o table

@@ -1,0 +1,34 @@
+
+[1;36m==> C1  Workload identity has exactly one role assignment, scoped to one secret  (AC-6, AC-3)[0m
+[1;32mPASS[0m 1 assignment
+[1;32mPASS[0m role = Key Vault Secrets User
+[1;32mPASS[0m scope = single secret (app-db-password)
+
+[1;36m==> C2  No privileged roles anywhere for the workload  (AC-6, AC-6(10))[0m
+[1;32mPASS[0m no Owner/Contributor/UAA/RBAC Admin/KV Admin/Officer
+
+[1;36m==> C3  Key Vault hardening  (SC-7, SC-28, CP-10, CM-7)[0m
+[1;32mPASS[0m RBAC permission model
+[1;32mPASS[0m soft delete
+[1;32mPASS[0m purge protection
+[1;32mPASS[0m firewall default = Deny
+[1;32mPASS[0m no trusted-service bypass
+[1;32mPASS[0m no legacy access policies
+[1;32mPASS[0m enabledForDeployment disabled
+[1;32mPASS[0m enabledForTemplateDeployment disabled
+[1;32mPASS[0m enabledForDiskEncryption disabled
+
+[1;36m==> C4  Secrets expire  (IA-5(1)-style rotation hygiene)[0m
+[1;32mPASS[0m app-db-password expires 2027-01-26T19:01:47+00:00
+[1;32mPASS[0m unrelated-team-secret expires 2027-01-26T19:01:47+00:00
+
+[1;36m==> C5  Audit logging is on  (AU-2, AU-12)[0m
+[1;32mPASS[0m Key Vault AuditEvent -> Log Analytics
+[1;32mPASS[0m Activity Log -> Log Analytics
+
+[1;36m==> C6  Network: firewall blocks callers outside the allow-list  (SC-7)[0m
+Manual check (Cloud Shell has a different IP than your laptop):
+  az keyvault secret show --vault-name sc500kvzt1028182 -n app-db-password   # expect ForbiddenByFirewall
+[1;33mWARN[0m No probe VM (DEPLOY_WORKLOAD=false). Data-plane tests C7/C8 skipped.
+
+[1;32mALL CHECKS PASSED[0m

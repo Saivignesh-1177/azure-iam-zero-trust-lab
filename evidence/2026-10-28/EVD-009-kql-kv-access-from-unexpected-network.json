@@ -1,0 +1,10 @@
+[
+  {
+    "CallerIPAddress": "<ADMIN_PUBLIC_IP>",
+    "CallerObjectId": "<ARC_SERVER_PRINCIPAL_ID>",
+    "FirstSeen": "2026-10-28T19:31:29.2413063Z",
+    "Reads": "5",
+    "Secrets": "[\"app-db-password\"]",
+    "TableName": "PrimaryResult"
+  }
+]

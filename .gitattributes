@@ -1,0 +1,7 @@
+# Everything is LF in the repo AND in working copies (scripts run on Linux; core.autocrlf would break them)
+* text=auto eol=lf
+*.ps1 text eol=crlf
+# Evidence is stored byte-for-byte so SHA256SUMS.txt always verifies after checkout
+evidence/** -text
+*.png binary
+*.iso binary

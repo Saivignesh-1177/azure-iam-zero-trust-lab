@@ -1,0 +1,25 @@
+
+[1;35m### A03 SSRF -> steal the workload identity (OWASP A10)[0m
+ATT&CK T1190 → T1528 · threat T17 · controls SC-7, SI-10 · app restarted with ZT_VULN_SSRF=1 for this test
+step 1 (HIMDS via SSRF): {"status": 401, "www_authenticate": "Basic realm=/var/opt/azcmagent/tokens/<GUID>.key", "body": "{\"error\":\"unauthorized_client\",\"error_description\":\"Missing Basic Authorization header\",\"error_codes\":[401],\"timestamp\":\"2026-10-28 19:42:45.817923639 +0000 UTC m=+1318.797406351\",\"trace_id\":\"\",\"correlation_id\":\"<GUID>\"}\n"}
+[1;32mPASS[0m HIMDS answers SSRF with a 401 challenge, not a token
+step 2 (file:// read of the key via SSRF): key readable = yes
+[1;33mWARN[0m FINDING F-005: SSRF reads the Arc challenge key via file:// (app is in group himds). Fix: allow-list URL schemes/hosts.
+[1;32mPASS[0m attacker cannot add the Authorization header through SSRF -> still no token
+[1;32mPASS[0m vulnerable endpoint disabled again
+
+[1;35m### A08 Re-test F-005 after the fix (ZT_VULN_SSRF=2: scheme allow-list, internal-IP block, no redirects)[0m
+OWASP SSRF Prevention Cheat Sheet · threat T17 · control SI-10 · expect: every internal target blocked with 400
+[1;32mPASS[0m blocked: file:///var/opt/azcmagent/tokens/x.key
+[1;32mPASS[0m blocked: http://localhost:40342/metadata/identity/oauth2/token?api-ve
+[1;32mPASS[0m blocked: http://127.0.0.1:40342/
+[1;32mPASS[0m blocked: http://2130706433:40342/
+[1;32mPASS[0m blocked: http://[::1]:40342/
+[1;32mPASS[0m blocked: http://169.254.169.254/metadata/instance
+[1;32mPASS[0m blocked: http://192.168.56.1/
+[1;32mPASS[0m blocked: gopher://localhost:40342/
+[1;32mPASS[0m legitimate external URL still works
+
+Transcript: .state/attacks-20261028T144241.txt
+
+[1;32mALL CHECKS PASSED[0m

@@ -1,0 +1,96 @@
+
+[1;35m### A01 Insider: low-privilege user tries to mint an Arc token[0m
+ATT&CK T1528 · threat T16 · controls AC-6, IA-9 · expect: challenge path visible, key file unreadable, no token
+realm=/var/opt/azcmagent/tokens/<GUID>.key
+cat: /var/opt/azcmagent/tokens/<GUID>.key: Permission denied
+[1;32mPASS[0m intern cannot read the Arc challenge key
+
+[1;35m### A02 Credential hunting on disk and in process memory[0m
+ATT&CK T1552.001, T1552.007 · threat T01 · controls IA-5(7) · expect: no secret material anywhere
+/opt/zt-app/zt_app.py:"""zt-app: the on-prem workload. Reads ONE secret from Azure Key Vault using the Azure Arc
+/opt/zt-app/zt_app.py:managed identity of the server it runs on - no password, key, or connection string anywhere.
+/opt/zt-app/zt_app.py:  GET /secret-check     fetches the secret and returns its length + SHA-256 prefix (never the value)
+/opt/zt-app/zt_app.py:Config (environment, non-secret): ZT_VAULT_NAME, ZT_SECRET_NAME, ZT_PORT, ZT_VULN_SSRF
+/opt/zt-app/zt_app.py:SECRET = os.environ.get("ZT_SECRET_NAME", "app-db-password")
+/opt/zt-app/zt_app.py:def read_secret() -> str:
+/opt/zt-app/zt_app.py:    hit = _cache.get(SECRET)
+/opt/zt-app/zt_app.py:    req = urllib.request.Request(f"https://{VAULT}.vault.azure.net/secrets/{SECRET}?api-version=7.4",
+/opt/zt-app/zt_app.py:    _cache[SECRET] = (value, time.time() + 300)   # 5-minute cache: fewer vault calls, fast revocation
+/opt/zt-app/zt_app.py:        if path.path == "/secret-check":
+---environ
+cat: /proc/13013/environ: Permission denied
+[1;32mPASS[0m app process environment unreadable to other users
+[1;32mPASS[0m no credential strings found
+
+[1;35m### A03 SSRF -> steal the workload identity (OWASP A10)[0m
+ATT&CK T1190 → T1528 · threat T17 · controls SC-7, SI-10 · app restarted with ZT_VULN_SSRF=1 for this test
+step 1 (HIMDS via SSRF): {"status": 401, "www_authenticate": "Basic realm=/var/opt/azcmagent/tokens/<GUID>.key", "body": "{\"error\":\"unauthorized_client\",\"error_description\":\"Missing Basic Authorization header\",\"error_codes\":[401],\"timestamp\":\"2026-10-28 19:34:50.874226807 +0000 UTC m=+843.853709520\",\"trace_id\":\"\",\"correlation_id\":\"<GUID>\"}\n"}
+[1;32mPASS[0m HIMDS answers SSRF with a 401 challenge, not a token
+step 2 (file:// read of the key via SSRF): key readable = yes
+[1;33mWARN[0m FINDING F-005: SSRF reads the Arc challenge key via file:// (app is in group himds). Fix: allow-list URL schemes/hosts.
+[1;32mPASS[0m attacker cannot add the Authorization header through SSRF -> still no token
+[1;32mPASS[0m vulnerable endpoint disabled again
+
+[1;35m### A04 Assume breach: attacker is ROOT on the server — what is the blast radius?[0m
+ATT&CK T1555.006, T1098.003 · threats T03, T04 · controls AC-6, AC-6(10) · expect: 1 secret readable, everything else 403
+PROBE imds_token http=200
+PROBE read_app_secret http=200 len=36 sha256_12=ac00aabf4e6d
+PROBE read_decoy_secret http=403 error=Forbidden inner=ForbiddenByRbac
+PROBE list_secrets http=403 error=Forbidden inner=ForbiddenByRbac
+PROBE write_secret http=403 error=Forbidden inner=ForbiddenByRbac
+PROBE delete_secret http=403 error=Forbidden inner=ForbiddenByRbac
+PROBE arm_list_rgs http=200 items=0
+PROBE arm_read_rg http=403 error=AuthorizationFailed inner=
+PROBE arm_escalate_owner http=403 error=AuthorizationFailed inner=
+PROBE graph_list_users http=403 error=Authorization_RequestDenied inner=
+PROBE internet_egress http=200 body=non-json
+[1;32mPASS[0m root gets a token (expected: it IS the workload)
+[1;32mPASS[0m can read app secret (by design)
+[1;32mPASS[0m cannot read decoy secret
+[1;32mPASS[0m cannot list secrets
+[1;32mPASS[0m cannot overwrite secret
+[1;32mPASS[0m cannot delete secret
+[1;32mPASS[0m sees zero resource groups (ARM filters lists)
+[1;32mPASS[0m cannot read the resource group
+[1;32mPASS[0m cannot grant itself Owner (escalation)
+[1;32mPASS[0m cannot read the directory
+(internet_egress is informational on-prem: no egress filtering on a home NAT -> RISK-08)
+
+[1;35m### A05 Token theft & replay from another machine[0m
+ATT&CK T1528, T1550.001 · threat T02 · control SC-7 · expect: works from the SAME public IP (finding), fails elsewhere
+stolen token: eyJ0eXAiOiJK… (len 1871) — exfiltrated to the laptop
+replay from laptop (same home public IP as the VM): http=200
+[1;33mWARN[0m FINDING (expected): IP allow-list cannot tell the VM from other devices behind the same home NAT -> RISK-08
+[1;32mPASS[0m stolen token still cannot read the decoy
+Manual: paste the token into Azure Cloud Shell and repeat -> expect 403 ForbiddenByFirewall.
+Detection: queries/kv-secret-reads-by-identity.kql shows the read with CallerIPAddress + identity oid.
+
+[1;35m### A07 Local privilege escalation attempts by the insider[0m
+ATT&CK T1548.003, T1098 · threat T16 · controls AC-6, AU-12 · expect: denied and audited
+sudo: a password is required
+---
+intern
+---
+ls: cannot open directory '/var/opt/azcmagent/tokens': Permission denied
+[1;32mPASS[0m no sudo for intern
+auditd 'access_denied' records of intern hitting Arc's token dir today: 0
+[1;33mWARN[0m no audit hit (run a01 first)
+
+[1;35m### A06 SSH brute force from the lab network (runs last: it bans the laptop for 2 min)[0m
+ATT&CK T1110 · threat T11 · controls AC-7, IA-2 · expect: password + unknown keys refused, fail2ban bans source
+[1;32mPASS[0m password authentication is not even offered
+root@192.168.56.10: Permission denied (publickey).
+admin@192.168.56.10: Permission denied (publickey).
+intern@192.168.56.10: Permission denied (publickey).
+Connection reset by 192.168.56.10 port 22
+ssh: connect to host 192.168.56.10 port 22: Connection timed out
+[1;32mPASS[0m fail2ban now blocks the attacker IP (even with a valid key)
+[1;32mPASS[0m banned: 'ssh: connect to host 192.168.56.10 port 22: Connection timed out'
+waiting 130s for the 2-minute ban to expire...
+|  |- Total failed:	9
+   |- Total banned:	2
+[1;32mPASS[0m ban was recorded by fail2ban
+
+Transcript: .state/attacks-20261028T143445.txt
+
+[1;32mALL CHECKS PASSED[0m

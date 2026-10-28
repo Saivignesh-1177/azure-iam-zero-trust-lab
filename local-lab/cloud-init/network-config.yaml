@@ -1,0 +1,12 @@
+# netplan v2 for VirtualBox: NIC1 = NAT (internet/Azure egress), NIC2 = host-only lab network.
+version: 2
+ethernets:
+  nat:
+    match:
+      name: enp0s3
+    dhcp4: true
+  lab:
+    match:
+      name: enp0s8
+    dhcp4: false
+    addresses: [192.168.56.10/24]   # static, outside VirtualBox's DHCP range (.101-.254)

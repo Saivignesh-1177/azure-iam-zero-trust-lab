@@ -1,0 +1,4 @@
+
+[1;35m### A05 Token theft & replay from another machine[0m
+ATT&CK T1528, T1550.001 · threat T02 · control SC-7 · expect: works from the SAME public IP (finding), fails elsewhere
+stolen token: eyJ0eXAiOiJK… (len 1871) — exfiltrated to the laptop

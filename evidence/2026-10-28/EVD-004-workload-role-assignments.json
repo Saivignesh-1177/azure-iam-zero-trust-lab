@@ -1,0 +1,19 @@
+[
+  {
+    "createdBy": "<ADMIN_OBJECT_ID>",
+    "createdOn": "2026-10-28T19:05:43.390430+00:00",
+    "description": "Workload may read only app-db-password (NIST AC-6).",
+    "id": "/subscriptions/<SUBSCRIPTION_ID>/resourcegroups/rg-sc500-iam-zt-lab/providers/Microsoft.KeyVault/vaults/sc500kvzt1028182/secrets/app-db-password/providers/Microsoft.Authorization/roleAssignments/<GUID>",
+    "name": "<GUID>",
+    "principalId": "<MI_PRINCIPAL_ID>",
+    "principalName": "<MI_CLIENT_ID>",
+    "principalType": "ServicePrincipal",
+    "resourceGroup": "rg-sc500-iam-zt-lab",
+    "roleDefinitionId": "/subscriptions/<SUBSCRIPTION_ID>/providers/Microsoft.Authorization/roleDefinitions/4633458b-17de-408a-b874-0445c86b69e6",
+    "roleDefinitionName": "Key Vault Secrets User",
+    "scope": "/subscriptions/<SUBSCRIPTION_ID>/resourcegroups/rg-sc500-iam-zt-lab/providers/Microsoft.KeyVault/vaults/sc500kvzt1028182/secrets/app-db-password",
+    "type": "Microsoft.Authorization/roleAssignments",
+    "updatedBy": "<ADMIN_OBJECT_ID>",
+    "updatedOn": "2026-10-28T19:24:50.035516+00:00"
+  }
+]

@@ -1,0 +1,9 @@
+// Denied data-plane calls = someone tried something they are not allowed to do. (AU-6, SI-4)
+// Expect after 02-verify.sh: 403s for the decoy read, list, write and delete probes.
+AzureDiagnostics
+| where ResourceProvider == "MICROSOFT.KEYVAULT" and Category == "AuditEvent"
+| where httpStatusCode_d in (401, 403)
+| summarize Attempts = count(), Operations = make_set(OperationName), FirstSeen = min(TimeGenerated),
+            LastSeen = max(TimeGenerated)
+    by CallerObjectId = identity_claim_oid_g, CallerIPAddress, ResultSignature
+| order by Attempts desc

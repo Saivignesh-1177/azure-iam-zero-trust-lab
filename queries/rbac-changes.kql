@@ -1,0 +1,9 @@
+// Role assignment writes/deletes = privilege changes. (AC-6(9), AU-6)  ATT&CK T1098.003
+AzureActivity
+| where OperationNameValue in~ ("MICROSOFT.AUTHORIZATION/ROLEASSIGNMENTS/WRITE",
+                                "MICROSOFT.AUTHORIZATION/ROLEASSIGNMENTS/DELETE")
+| where ActivityStatusValue in~ ("Success", "Succeeded", "Start")
+| extend Props = parse_json(Properties)
+| project TimeGenerated, Caller, CallerIpAddress, OperationNameValue, ActivityStatusValue,
+          Scope = tostring(Props.entity), ResourceGroup
+| order by TimeGenerated desc

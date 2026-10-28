@@ -1,0 +1,21 @@
+
+[1;35m### A01 Insider: low-privilege user tries to mint an Arc token[0m
+ATT&CK T1528 · threat T16 · controls AC-6, IA-9 · expect: challenge path visible, key file unreadable, no token
+realm=/var/opt/azcmagent/tokens/<GUID>.key
+cat: /var/opt/azcmagent/tokens/<GUID>.key: Permission denied
+[1;32mPASS[0m intern cannot read the Arc challenge key
+
+[1;35m### A07 Local privilege escalation attempts by the insider[0m
+ATT&CK T1548.003, T1098 · threat T16 · controls AC-6, AU-12 · expect: denied and audited
+sudo: a password is required
+---
+intern
+---
+ls: cannot open directory '/var/opt/azcmagent/tokens': Permission denied
+[1;32mPASS[0m no sudo for intern
+auditd 'access_denied' records of intern hitting Arc's token dir today: 6
+[1;32mPASS[0m attempts were audited (AU-12)
+
+Transcript: .state/attacks-20261028T143827.txt
+
+[1;32mALL CHECKS PASSED[0m

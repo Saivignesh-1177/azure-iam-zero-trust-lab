@@ -1,0 +1,6 @@
+[
+  {
+    "role": "Key Vault Secrets Officer",
+    "scope": "/subscriptions/<SUBSCRIPTION_ID>/resourcegroups/rg-sc500-iam-zt-lab/providers/Microsoft.KeyVault/vaults/sc500kvzt1028182"
+  }
+]
