@@ -56,7 +56,10 @@ def test_deploy_uses_oidc_manual_trigger_and_environment():
     assert "environment: lab" in deploy
     assert "id-token: write" in deploy
     assert "client-secret" not in deploy and "creds:" not in deploy, "use OIDC, not a stored secret"
-    assert "secrets." not in deploy, "deploy workflow should not need any GitHub secret"
+    # GitHub secrets are allowed ONLY for identifiers that must be masked in public logs - never a credential.
+    import re
+    used = set(re.findall(r"secrets\.([A-Z_]+)", deploy))
+    assert used <= {"AZURE_CLIENT_ID", "AZURE_TENANT_ID", "AZURE_SUBSCRIPTION_ID", "KV_ALLOWED_IPS"}, used
 
 
 def test_probe_never_prints_secret_values():

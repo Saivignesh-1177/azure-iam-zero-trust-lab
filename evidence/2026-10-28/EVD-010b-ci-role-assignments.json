@@ -1,0 +1,12 @@
+[
+  {
+    "condition": null,
+    "role": "Contributor",
+    "scope": "/subscriptions/<SUBSCRIPTION_ID>/resourceGroups/rg-sc500-iam-zt-lab"
+  },
+  {
+    "condition": "((!(ActionMatches{'Microsoft.Authorization/roleAssignments/write'})) OR (@Request[Microsoft.Authorization/roleAssignments:RoleDefinitionId] ForAnyOfAnyValues:GuidEquals {4633458b-17de-408a-b874-0445c86b69e6})) AND ((!(ActionMatches{'Microsoft.Authorization/roleAssignments/delete'})) OR (@Resource[Microsoft.Authorization/roleAssignments:RoleDefinitionId] ForAnyOfAnyValues:GuidEquals {4633458b-17de-408a-b874-0445c86b69e6}))",
+    "role": "Role Based Access Control Administrator",
+    "scope": "/subscriptions/<SUBSCRIPTION_ID>/resourceGroups/rg-sc500-iam-zt-lab"
+  }
+]

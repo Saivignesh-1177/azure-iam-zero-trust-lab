@@ -24,7 +24,7 @@ jobs:
     env:
       RG: ${{ vars.AZURE_RG }}
       SUFFIX: ${{ vars.LAB_SUFFIX }}
-      ALLOWED_IPS: ${{ vars.KV_ALLOWED_IPS || '[]' }}
+      ALLOWED_IPS: ${{ secrets.KV_ALLOWED_IPS || '[]' }}   # secret only so it is masked in public logs
       SSH_KEY: ${{ vars.VM_SSH_PUBLIC_KEY }}
       DEPLOY_WORKLOAD: ${{ inputs.deploy_workload }}
     steps:
@@ -33,9 +33,10 @@ jobs:
       - name: Azure login (OIDC, no secret)
         uses: azure/login@v2
         with:
-          client-id: ${{ vars.AZURE_CLIENT_ID }}
-          tenant-id: ${{ vars.AZURE_TENANT_ID }}
-          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+          # Identifiers, not credentials - stored as secrets ONLY so GitHub masks them in public logs.
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       # Values travel through env vars, never inline ${{ }} in shell (script-injection hardening).
       # adminPrincipalId is left empty: the pipeline is only allowed to grant Key Vault Secrets User.
@@ -51,8 +52,8 @@ jobs:
               "vmSshPublicKey":  { "value": "$SSH_KEY" } } }
           EOF
 
-      - name: What-if (change preview, kept in the run log)
-        run: az deployment group what-if -g "$RG" -n zt-main -f infra/main.bicep -p @params.json
+      - name: What-if (change preview; resource IDs only so the public log stays clean)
+        run: az deployment group what-if -g "$RG" -n zt-main -f infra/main.bicep -p @params.json --result-format ResourceIdOnly
 
       - name: Deploy
-        run: az deployment group create -g "$RG" -n zt-main -f infra/main.bicep -p @params.json -o table
+        run: az deployment group create -g "$RG" -n zt-main -f infra/main.bicep -p @params.json --query properties.provisioningState -o tsv

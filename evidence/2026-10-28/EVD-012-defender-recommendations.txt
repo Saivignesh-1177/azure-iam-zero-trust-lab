@@ -1,0 +1,11 @@
+Microsoft cloud security benchmark (SecurityCenterBuiltIn, default subscription assignment)
+Non-compliant items for rg-sc500-iam-zt-lab on 2026-10-28:
+
+machines  Authentication to Linux machines should require SSH keys            -> F-010: no Guest Configuration data (monitor mode); on-box sshd -T shows passwordauthentication no
+machines  Linux machines should meet requirements for the Azure compute security baseline -> F-010: no Guest Configuration data (RISK-09)
+machines  SQL servers on machines should have vulnerability findings resolved -> N/A: no SQL Server installed (no data)
+machines  System updates should be installed on your machines (Update Center) -> RISK-09: patched by unattended-upgrades, invisible in monitor mode
+machines  Machines should be configured to periodically check for missing system updates -> RISK-09: same
+vaults    Azure Key Vaults should use private link                             -> RISK-01 (accepted: Private Endpoint not free)
+
+Guest Configuration assignments reported for zt-app-01: 0 (verified via ARM API)
