@@ -87,6 +87,6 @@ Local checks without Azure: `az bicep build --file infra/main.bicep && pytest -v
 - [x] Hybrid workload — VirtualBox server, Azure Arc identity, app live, secret hash verified
 - [x] Attack scenarios A01–A08 run; 2 findings (F-005 fixed + re-tested, RISK-08 accepted)
 - [x] Real evidence captured — `evidence/2026-10-28/` (26 files, SHA-256 verified)
-- [ ] Azure Policy + Defender report (EVD-008/012)
-- [ ] GitHub OIDC deploy run (EVD-010)
+- [x] Azure Policy + security benchmark report (EVD-008/012)
+- [x] GitHub OIDC deploy run: secretless, reviewer-approved, public log leak-free (EVD-010)
 - [ ] MFA screenshot (EVD-011)

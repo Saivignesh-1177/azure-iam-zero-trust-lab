@@ -1,0 +1,19 @@
+GitHub Actions run 40770880427 (deploy-lab, main) - 2026-10-28
+conclusion: success
+  success	Set up job
+  success	Run actions/checkout@v4
+  success	Azure login (OIDC, no secret)
+  success	Build parameters
+  success	What-if (change preview; resource IDs only so the public log stays clean)
+  success	Deploy
+  success	Post Azure login (OIDC, no secret)
+  success	Post Run actions/checkout@v4
+  success	Complete job
+
+Attempt 1: Azure login FAILED closed - AADSTS700213 (subject mismatch, finding F-011)
+Attempt 2 (after trust fix + human approval of environment 'lab'): SUCCESS
+
+Deployer recorded in Azure Activity Log: service principal gh-oidc-azure-iam-zero-trust-lab
+Public log leak check: subscription/tenant/app id/IP = 0 occurrences; GitHub-masked values = 11
+Secret rotated by the deploy; on-prem app served the new value (hash matches admin side)
+Arc server role after deploy: Key Vault Secrets User (unchanged)

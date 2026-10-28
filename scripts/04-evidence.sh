@@ -80,6 +80,7 @@ if [[ -n "${GH_APP_ID:-}" ]]; then
   copy "$STATE/fic.json"         EVD-010-federated-credential.json
   copy "$STATE/gh-roles.json"    EVD-010b-ci-role-assignments.json
   copy "$STATE/gh-secrets.json"  EVD-010c-ci-client-secrets-should-be-empty.json
+  copy "$STATE/gh-deploy-run.txt" EVD-010d-pipeline-deploy-run.txt
 else
   warn "GitHub OIDC not configured - skipped"
 fi
