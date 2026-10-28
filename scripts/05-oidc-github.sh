@@ -8,7 +8,11 @@ require_login
 
 : "${GITHUB_REPO:=$(git remote get-url origin | sed -E 's#(https://github.com/|git@github.com:)##; s#\.git$##')}"
 APP_NAME="gh-oidc-$(basename "$GITHUB_REPO")"
-SUBJECT="repo:${GITHUB_REPO}:environment:lab"
+# Ask GitHub which subject format it will put in the token. Newer repos use IMMUTABLE ids
+# ("repo:owner@<owner-id>/repo@<repo-id>"), which survive renames and stop a re-created repo with the
+# same name from inheriting this trust. Fall back to the legacy name-only format.
+PREFIX="$(gh api "repos/$GITHUB_REPO/actions/oidc/customization/sub" --jq .sub_claim_prefix 2>/dev/null || true)"
+SUBJECT="${PREFIX:-repo:${GITHUB_REPO}}:environment:lab"
 KV_SECRETS_USER="4633458b-17de-408a-b874-0445c86b69e6"
 
 log "App registration + service principal for $GITHUB_REPO"
@@ -31,6 +35,9 @@ cat > "$STATE/fic-request.json" <<EOF
 EOF
 if [[ "$(azq ad app federated-credential list --id "$GH_APP_ID" --query "[?name=='github-lab-environment'] | length(@)" -o tsv)" == "0" ]]; then
   az ad app federated-credential create --id "$GH_APP_ID" --parameters @"$STATE/fic-request.json" >/dev/null
+else
+  # Keep the existing credential in sync if GitHub's subject format changed (AADSTS700213 otherwise)
+  az ad app federated-credential update --id "$GH_APP_ID" --federated-credential-id github-lab-environment     --parameters @"$STATE/fic-request.json" >/dev/null
 fi
 pass "federated credential (no client secret created)"
 
