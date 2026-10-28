@@ -25,11 +25,11 @@ First real run: **`evidence/2026-10-28/`** (26 files, hashes in `SHA256SUMS.txt`
 | EVD-005 | `EVD-005-keyvault-config.json` | RBAC mode, purge protection, firewall Deny (AC-3, SC-7, CP-10) | `02-verify.sh` C3 | 2026-10-28 | PASS — RBAC, purge protection, Deny |
 | EVD-006 | `EVD-006-keyvault-diagnostic-settings.json` | AuditEvent + Activity Log exported (AU-2, AU-12) | `02-verify.sh` C5 | 2026-10-28 | PASS — AuditEvent + Activity Log |
 | EVD-007 | `EVD-007b-workload-probes.txt` | 1 allowed read, 7 denied actions from inside the workload (AC-3, AC-6(10), IA-9) | `02-verify.sh` C8 | 2026-10-28 | PARTIAL — C1–C5 PASS (19/19); C7/C8 N/A (no Azure VM, see EVD-013b) |
-| EVD-008 | `EVD-008-policy-states.txt` | Azure Policy compliance incl. accepted RISK-01 (CM-6, CA-7) | `03-policy.sh report` | — | NOT RUN |
+| EVD-008 | `EVD-008-policy-states.txt` | Azure Policy compliance incl. accepted RISK-01 (CM-6, CA-7) | `03-policy.sh report` | 2026-10-28 | PASS w/ 2 expected findings: 7 KV policies compliant; private link (RISK-01) + update check (RISK-09) non-compliant |
 | EVD-009 | `EVD-009-kql-*.json` | Logs show who read/was denied what, RBAC changes (AU-6, SI-4) | `04-evidence.sh` | 2026-10-28 | PASS — reads, 10 denials, new-IP hunt populated |
-| EVD-010 | `EVD-010-federated-credential.json` | Pipeline uses OIDC, 0 client secrets, ABAC-constrained (IA-5, AC-6(1)) | `05-oidc-github.sh` | — | NOT RUN |
+| EVD-010 | `EVD-010-federated-credential.json` | Pipeline uses OIDC, 0 client secrets, ABAC-constrained (IA-5, AC-6(1)) | `05-oidc-github.sh` | 2026-10-28 | PARTIAL: OIDC config verified (0 client secrets, env-pinned subject, ABAC condition); pipeline deploy run pending |
 | EVD-011 | `EVD-011-security-defaults.png` | MFA enforced for the admin (IA-2) | Manual screenshot | — | NOT RUN |
-| EVD-012 | `EVD-012-defender-recommendations.txt` | Defender CSPM posture for the RG (RA-5) | `03-policy.sh report` | — | NOT RUN |
+| EVD-012 | `EVD-012-defender-recommendations.txt` | Defender CSPM posture for the RG (RA-5) | `03-policy.sh report` | 2026-10-28 | 6 MCSB findings, all explained: RISK-01, RISK-09/F-010 (no Guest Config data), SQL N/A |
 | EVD-013 | `EVD-013-attack-run.txt` | Hybrid attack scenarios A01–A07 against the on-prem Arc server (AC-6, AC-7, SI-10, CM-7) | `attacks/run-attacks.sh` | 2026-10-28 | PASS with 2 findings (F-005 fixed + re-tested, RISK-08 accepted) |
 
 ## Expected results (so you know what "good" looks like)

@@ -245,4 +245,5 @@ Private Link / VPN / dedicated egress IPs.
 | F-007 | 2026-10-28 | Denied token access not audited | Medium | Watch rule can't see denied traversal; `ausearch` read stdin | CIS EACCES rule + `--input-logs` | ✅ 6 events |
 | F-008 | 2026-10-28 | Debug trace printed a bearer token | Medium (process) | `bash -x` | ERR trap prints line only; JWT redaction | ✅ |
 | F-009 | 2026-10-28 | First GitHub CI run: Checkov + Gitleaks red | Low (no real leak) | SARIF file renamed by newer Checkov; Gitleaks flagged public role GUIDs + one CSV phrase | Upload `results/` dir; narrow `.gitleaks.toml` allow-list (2 public GUIDs); `.gitleaksignore` for 1 reviewed fingerprint; local leak drill still caught | ✅ CI 5/5 green |
-| F-010 | | | | | | |
+| F-010 | 2026-10-28 | MCSB says Arc server lacks SSH-key auth & baseline | Low (visibility, not exposure) | Guest Configuration disabled by monitor mode → 0 reports → AuditIfNotExists = NonCompliant | Accepted as RISK-09; on-box evidence compensates | ✅ verified 0 GC assignments + `passwordauthentication no` |
+| F-011 | | | | | | |

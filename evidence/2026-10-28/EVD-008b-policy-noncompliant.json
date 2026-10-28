@@ -1,0 +1,34 @@
+[
+  {
+    "policy": "<GUID>",
+    "resource": "/subscriptions/<SUBSCRIPTION_ID>/resourcegroups/rg-sc500-iam-zt-lab/providers/microsoft.hybridcompute/machines/zt-app-01"
+  },
+  {
+    "policy": "<GUID>",
+    "resource": "/subscriptions/<SUBSCRIPTION_ID>/resourcegroups/rg-sc500-iam-zt-lab/providers/microsoft.hybridcompute/machines/zt-app-01"
+  },
+  {
+    "policy": "<GUID>",
+    "resource": "/subscriptions/<SUBSCRIPTION_ID>/resourcegroups/rg-sc500-iam-zt-lab/providers/microsoft.hybridcompute/machines/zt-app-01"
+  },
+  {
+    "policy": "<GUID>",
+    "resource": "/subscriptions/<SUBSCRIPTION_ID>/resourcegroups/rg-sc500-iam-zt-lab/providers/microsoft.hybridcompute/machines/zt-app-01"
+  },
+  {
+    "policy": "<GUID>",
+    "resource": "/subscriptions/<SUBSCRIPTION_ID>/resourcegroups/rg-sc500-iam-zt-lab/providers/microsoft.hybridcompute/machines/zt-app-01"
+  },
+  {
+    "policy": "<GUID>",
+    "resource": "/subscriptions/<SUBSCRIPTION_ID>/resourcegroups/rg-sc500-iam-zt-lab/providers/microsoft.hybridcompute/machines/zt-app-01"
+  },
+  {
+    "policy": "<GUID>",
+    "resource": "/subscriptions/<SUBSCRIPTION_ID>/resourcegroups/rg-sc500-iam-zt-lab/providers/microsoft.keyvault/vaults/sc500kvzt1028182"
+  },
+  {
+    "policy": "<GUID>",
+    "resource": "/subscriptions/<SUBSCRIPTION_ID>/resourcegroups/rg-sc500-iam-zt-lab/providers/microsoft.keyvault/vaults/sc500kvzt1028182"
+  }
+]
