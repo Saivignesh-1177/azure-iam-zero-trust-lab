@@ -218,6 +218,18 @@ KQL showed every A04 denial (10 × 403 by the Arc identity). But the A05 replay 
 firewall nor the logs can tell devices apart. That's RISK-08 with real data, and the reason companies use
 Private Link / VPN / dedicated egress IPs.
 
+### Secretless pipeline — finally green 🚀
+
+First run died at login: `AADSTS700213`. GitHub now puts **immutable ids** in the token subject
+(`repo:owner@<id>/repo@<id>:environment:lab`); my credential trusted the old name-only form. Azure said
+no — fail-closed, exactly right. Read the prefix from GitHub's API, updated the trust (F-011).
+
+Second run waited for **my approval** (I first approved the PR merges and wondered why nothing
+happened — the environment gate is a separate button; that's the point of it). Then: OIDC login → what-if →
+deploy, all green. Azure's Activity Log names the **pipeline service principal** as the deployer, the public
+log has **zero** ids/IP (11 values masked), and the deploy rotated the secret — my laptop VM's app served the
+new hash on the next call without anyone touching it. 🙂
+
 ## 📅 ____-__-__ — Day 3: policy, logs, break-it drills
 
 - [ ] Policy report: ___ compliant / ___ non-compliant. Expected non-compliant: private link (RISK-01). Others?

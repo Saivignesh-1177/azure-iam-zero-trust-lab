@@ -13,7 +13,7 @@
     "roleDefinitionName": "Key Vault Secrets User",
     "scope": "/subscriptions/<SUBSCRIPTION_ID>/resourcegroups/rg-sc500-iam-zt-lab/providers/Microsoft.KeyVault/vaults/sc500kvzt1028182/secrets/app-db-password",
     "type": "Microsoft.Authorization/roleAssignments",
-    "updatedBy": "<ADMIN_OBJECT_ID>",
-    "updatedOn": "2026-10-28T19:24:50.035516+00:00"
+    "updatedBy": "<GITHUB_OIDC_SP_ID>",
+    "updatedOn": "2026-10-28T23:12:21.579573+00:00"
   }
 ]

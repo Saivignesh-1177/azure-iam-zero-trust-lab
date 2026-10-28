@@ -1,1 +1,62 @@
-[]
+[
+  {
+    "ActivityStatusValue": "Success",
+    "Caller": "<GITHUB_OIDC_SP_ID>",
+    "CallerIpAddress": "132.196.30.214",
+    "OperationNameValue": "MICROSOFT.AUTHORIZATION/ROLEASSIGNMENTS/WRITE",
+    "ResourceGroup": "RG-SC500-IAM-ZT-LAB",
+    "Scope": "/subscriptions/<SUBSCRIPTION_ID>/resourcegroups/rg-sc500-iam-zt-lab/providers/Microsoft.KeyVault/vaults/sc500kvzt1028182/secrets/app-db-password/providers/Microsoft.Authorization/roleAssignments/<GUID>",
+    "TableName": "PrimaryResult",
+    "TimeGenerated": "2026-10-28T23:12:23.4769967Z"
+  },
+  {
+    "ActivityStatusValue": "Start",
+    "Caller": "<GITHUB_OIDC_SP_ID>",
+    "CallerIpAddress": "132.196.30.214",
+    "OperationNameValue": "MICROSOFT.AUTHORIZATION/ROLEASSIGNMENTS/WRITE",
+    "ResourceGroup": "RG-SC500-IAM-ZT-LAB",
+    "Scope": "/subscriptions/<SUBSCRIPTION_ID>/resourcegroups/rg-sc500-iam-zt-lab/providers/Microsoft.KeyVault/vaults/sc500kvzt1028182/secrets/app-db-password/providers/Microsoft.Authorization/roleAssignments/<GUID>",
+    "TableName": "PrimaryResult",
+    "TimeGenerated": "2026-10-28T23:12:21.1332453Z"
+  },
+  {
+    "ActivityStatusValue": "Success",
+    "Caller": "<EMAIL>",
+    "CallerIpAddress": "<ADMIN_PUBLIC_IP>",
+    "OperationNameValue": "MICROSOFT.AUTHORIZATION/ROLEASSIGNMENTS/WRITE",
+    "ResourceGroup": "RG-SC500-IAM-ZT-LAB",
+    "Scope": "/subscriptions/<SUBSCRIPTION_ID>/resourceGroups/rg-sc500-iam-zt-lab/providers/Microsoft.Authorization/roleAssignments/<GUID>",
+    "TableName": "PrimaryResult",
+    "TimeGenerated": "2026-10-28T21:00:58.3936464Z"
+  },
+  {
+    "ActivityStatusValue": "Start",
+    "Caller": "<EMAIL>",
+    "CallerIpAddress": "<ADMIN_PUBLIC_IP>",
+    "OperationNameValue": "MICROSOFT.AUTHORIZATION/ROLEASSIGNMENTS/WRITE",
+    "ResourceGroup": "RG-SC500-IAM-ZT-LAB",
+    "Scope": "/subscriptions/<SUBSCRIPTION_ID>/resourceGroups/rg-sc500-iam-zt-lab/providers/Microsoft.Authorization/roleAssignments/<GUID>",
+    "TableName": "PrimaryResult",
+    "TimeGenerated": "2026-10-28T21:00:56.8624643Z"
+  },
+  {
+    "ActivityStatusValue": "Success",
+    "Caller": "<EMAIL>",
+    "CallerIpAddress": "<ADMIN_PUBLIC_IP>",
+    "OperationNameValue": "MICROSOFT.AUTHORIZATION/ROLEASSIGNMENTS/WRITE",
+    "ResourceGroup": "RG-SC500-IAM-ZT-LAB",
+    "Scope": "/subscriptions/<SUBSCRIPTION_ID>/resourceGroups/rg-sc500-iam-zt-lab/providers/Microsoft.Authorization/roleAssignments/<GUID>",
+    "TableName": "PrimaryResult",
+    "TimeGenerated": "2026-10-28T21:00:52.4098804Z"
+  },
+  {
+    "ActivityStatusValue": "Start",
+    "Caller": "<EMAIL>",
+    "CallerIpAddress": "<ADMIN_PUBLIC_IP>",
+    "OperationNameValue": "MICROSOFT.AUTHORIZATION/ROLEASSIGNMENTS/WRITE",
+    "ResourceGroup": "RG-SC500-IAM-ZT-LAB",
+    "Scope": "/subscriptions/<SUBSCRIPTION_ID>/resourceGroups/rg-sc500-iam-zt-lab/providers/Microsoft.Authorization/roleAssignments/<GUID>",
+    "TableName": "PrimaryResult",
+    "TimeGenerated": "2026-10-28T21:00:51.0817512Z"
+  }
+]
