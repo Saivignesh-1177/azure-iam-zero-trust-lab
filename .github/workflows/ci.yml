@@ -27,7 +27,7 @@ jobs:
           az bicep build --file infra/activity-log.bicep --outfile compiled/activity-log.json
           az bicep lint --file infra/main.bicep
           az bicep lint --file infra/activity-log.bicep
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: compiled-arm
           path: compiled/
