@@ -19,7 +19,7 @@ jobs:
     name: Bicep build + lint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Build and lint (bicepconfig.json makes security rules errors)
         run: |
           az bicep install
@@ -36,7 +36,7 @@ jobs:
     name: Design + traceability tests
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
@@ -52,7 +52,7 @@ jobs:
       contents: read
       security-events: write   # upload SARIF to the Security tab (free for public repos)
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: actions/download-artifact@v8
         with:
           name: compiled-arm
@@ -76,7 +76,7 @@ jobs:
       contents: read
       pull-requests: read
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0       # scan full history, not just the last commit
       - uses: gitleaks/gitleaks-action@v2
