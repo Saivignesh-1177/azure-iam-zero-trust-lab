@@ -101,6 +101,17 @@ GET https://graph.microsoft.com/v1.0/servicePrincipals?$filter=displayName eq 'z
 
 ---
 
+### Gotchas hit on 2026-10-28 (real, not hypothetical)
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| `GET /me` returns a short `"id"` (16 hex chars, no dashes) | You're in the **personal Microsoft account** (consumer) context, not your Entra tenant. Tenant policies don't exist there | Use a tenant (work) account, or the Azure portal / CLI. `?tenant=<domain>` on Graph Explorer did **not** help for a Gmail-based tenant owner |
+| `Connect-MgGraph : An error occurred when writing to a listener` | Known Microsoft.Graph module bug on **Windows PowerShell 5.1** | Use **PowerShell 7** (`winget install Microsoft.PowerShell`) |
+| `az rest` → `403 required scopes are missing in the token` | The Azure CLI app's Graph token has no `Policy.Read.All` | Use Graph Explorer / Graph PowerShell for Q1–Q3 |
+| A failed query wrote `"isEnabled": null` to a file | Script kept running after auth failed | Never keep null results as evidence: discard and record why |
+
+Fallback for Q1 that always works: Azure portal → **Microsoft Entra ID → Properties → Manage security defaults**.
+
 ### Behavioural evidence beats configuration evidence
 
 Configuration (Q1) says MFA *should* happen. The strongest proof is that it *did*: the first

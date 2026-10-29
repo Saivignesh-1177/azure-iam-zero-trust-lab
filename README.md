@@ -89,4 +89,4 @@ Local checks without Azure: `az bicep build --file infra/main.bicep && pytest -v
 - [x] Real evidence captured — `evidence/2026-10-28/` (26 files, SHA-256 verified)
 - [x] Azure Policy + security benchmark report (EVD-008/012)
 - [x] GitHub OIDC deploy run: secretless, reviewer-approved, public log leak-free (EVD-010)
-- [ ] MFA screenshot (EVD-011)
+- [x] MFA enforcement verified by behaviour (EVD-011); portal screenshot optional
