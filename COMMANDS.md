@@ -391,6 +391,28 @@ az vm start      -g $RG -n $OUT_vmName
 
 ---
 
+## 13b. Identity evidence with Microsoft Graph → `queries/graph/README.md`
+
+Eight reusable read-only queries (MFA, Conditional Access, admin roles, app secrets, federated
+credentials, sign-ins, managed identities). The one for MFA (EVD-011):
+
+```http
+GET https://graph.microsoft.com/v1.0/policies/identitySecurityDefaultsEnforcementPolicy
+```
+Run it in **Graph Explorer** (https://developer.microsoft.com/graph/graph-explorer → Sign in → paste →
+Run; consent to `Policy.Read.All` if asked), or:
+```powershell
+Install-Module Microsoft.Graph -Scope CurrentUser
+Connect-MgGraph -Scopes "Policy.Read.All"
+Invoke-MgGraphRequest -Method GET -Uri "https://graph.microsoft.com/v1.0/policies/identitySecurityDefaultsEnforcementPolicy" | Select-Object displayName, isEnabled
+```
+Works with the Azure CLI token (no extra consent):
+```bash
+az rest --method get --url "https://graph.microsoft.com/v1.0/applications?\$filter=displayName eq 'gh-oidc-azure-iam-zero-trust-lab'&\$select=displayName,passwordCredentials,keyCredentials"
+```
+
+---
+
 ## 14. One-page cheat sheet
 
 | Goal | Command |
@@ -405,3 +427,5 @@ az vm start      -g $RG -n $OUT_vmName
 | Query logs | `az monitor log-analytics query -w <customerId> --analytics-query "<kql>"` |
 | Compliance | `az policy state summarize -g <rg>` |
 | Recover deleted secret | `az keyvault secret recover --vault-name <v> -n <name>` |
+| Is MFA enforced? (Graph) | `GET /v1.0/policies/identitySecurityDefaultsEnforcementPolicy` → `isEnabled` |
+| Does an app have secrets? (Graph) | `GET /v1.0/applications?$filter=displayName eq '<name>'&$select=passwordCredentials,keyCredentials` |

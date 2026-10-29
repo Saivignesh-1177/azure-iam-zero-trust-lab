@@ -28,7 +28,7 @@ First real run: **`evidence/2026-10-28/`** (26 files, hashes in `SHA256SUMS.txt`
 | EVD-008 | `EVD-008-policy-states.txt` | Azure Policy compliance incl. accepted RISK-01 (CM-6, CA-7) | `03-policy.sh report` | 2026-10-28 | PASS w/ 2 expected findings: 7 KV policies compliant; private link (RISK-01) + update check (RISK-09) non-compliant |
 | EVD-009 | `EVD-009-kql-*.json` | Logs show who read/was denied what, RBAC changes (AU-6, SI-4) | `04-evidence.sh` | 2026-10-28 | PASS — reads, 10 denials, new-IP hunt populated |
 | EVD-010 | `EVD-010-federated-credential.json` | Pipeline uses OIDC, 0 client secrets, ABAC-constrained (IA-5, AC-6(1)) | `05-oidc-github.sh` | 2026-10-28 | PASS: 0 client secrets, immutable-ID subject, ABAC condition; pipeline deploy succeeded after human approval, deployer = pipeline SP, public log leak-free (1st attempt failed closed: F-011) |
-| EVD-011 | `EVD-011-security-defaults.png` | MFA enforced for the admin (IA-2) | Manual screenshot | — | NOT RUN |
+| EVD-011 | `EVD-011-security-defaults.png` | MFA enforced for the admin (IA-2) | Manual screenshot | 2026-10-28 | PASS (behavioural): MFA enforced on every sign-in — first `az login` blocked with AADSTS50076, 4 device-code logins required MFA; 0 Conditional Access policies → security defaults. Config screenshot optional |
 | EVD-012 | `EVD-012-defender-recommendations.txt` | Defender CSPM posture for the RG (RA-5) | `03-policy.sh report` | 2026-10-28 | 6 MCSB findings, all explained: RISK-01, RISK-09/F-010 (no Guest Config data), SQL N/A |
 | EVD-013 | `EVD-013-attack-run.txt` | Hybrid attack scenarios A01–A07 against the on-prem Arc server (AC-6, AC-7, SI-10, CM-7) | `attacks/run-attacks.sh` | 2026-10-28 | PASS with 2 findings (F-005 fixed + re-tested, RISK-08 accepted) |
 

@@ -27,7 +27,7 @@ and GitHub resources, defined as code, tested before deployment, and verified af
 | [`infra/main.bicep`](infra/main.bicep) | Identity, Key Vault, secrets, scoped RBAC, logging, alerts, optional VM |
 | [`infra/activity-log.bicep`](infra/activity-log.bicep) | Subscription Activity Log → Log Analytics |
 | [`scripts/`](scripts) | `00` prereqs → `01` deploy → `02` verify → `03` policy → `04` evidence → `05` OIDC → `99` teardown |
-| [`queries/`](queries) | KQL hunts: secret reads, denials, unexpected networks, RBAC changes, log tampering |
+| [`queries/`](queries) | KQL hunts (secret reads, denials, new-IP reads, RBAC changes, log tampering) + [`graph/`](queries/graph) Microsoft Graph identity-evidence queries |
 | [`tests/`](tests) | 31 tests on the compiled template, repo hygiene and GRC traceability |
 | [`.github/workflows/`](.github/workflows) | CI (build, lint, tests, Checkov, Gitleaks) and OIDC deploy |
 | [`COMMANDS.md`](COMMANDS.md) | **Every command**, raw, with the why — plus break-it drills |
@@ -89,4 +89,4 @@ Local checks without Azure: `az bicep build --file infra/main.bicep && pytest -v
 - [x] Real evidence captured — `evidence/2026-10-28/` (26 files, SHA-256 verified)
 - [x] Azure Policy + security benchmark report (EVD-008/012)
 - [x] GitHub OIDC deploy run: secretless, reviewer-approved, public log leak-free (EVD-010)
-- [ ] MFA screenshot (EVD-011)
+- [x] MFA enforcement verified by behaviour (EVD-011); portal screenshot optional
